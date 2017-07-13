@@ -19,7 +19,7 @@ public class TestDao {
 	@Test
 	public void testMain() {
 		MyInterface ti = JooDaoFactory.getDao(MyInterface.class);
-		List<DataObject> result = ti.selectTest(0);
+		List<DataObject> result = ti.selectTest2("5");
 		System.out.println(result);
 	}
 
@@ -28,6 +28,8 @@ public class TestDao {
 		JooShardManager.addShard("s1", DataObject.class);
 		DataObject obj1 = new DataObject(1, 2, 3, 4, "5");
 		JooShardManager.getShard("s1", DataObject.class).add(obj1);
+		JooShardManager.addShard("s2", DataObject.class);
+		JooShardManager.getShard("s2", DataObject.class).add(obj1);
 	}
 
 }

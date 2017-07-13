@@ -32,8 +32,8 @@ public class TestJosql {
 	@Test
 	public void testBaseQuery() throws QueryParseException, QueryExecutionException {
 		Query q = new Query();
-		q.parse("select pr1,pr2 from org.theta.joobase.josql.DataObject where pr2.toString = '6' ");
-		q.setVariable("value", 0);
+		q.parse("select pr1,pr2 from org.theta.joobase.josql.DataObject where pr2.toString = ? ");
+		q.setVariable(1, 2);
 		QueryResults results = q.execute(datas);
 
 		System.out.println(results.getResults().size());

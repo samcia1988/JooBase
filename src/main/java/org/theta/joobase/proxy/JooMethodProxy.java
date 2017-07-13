@@ -2,7 +2,6 @@ package org.theta.joobase.proxy;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
 import java.util.List;
 
 import org.josql.Query;
@@ -36,7 +35,8 @@ public class JooMethodProxy {
 				switch (jooMethodInfo.getPolicy()) {
 				case ByOrder: {
 					for (int i = 0; i < args.length; i++)
-						query.setVariable(i, args[i]);
+						query.setVariable(i + 1,
+								args[i]); /*- JoSQL's anonymous args should start from 1 instead of Java's default value 0. */
 				}
 					break;
 				case ByName: {

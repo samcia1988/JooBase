@@ -20,8 +20,8 @@ public interface MyInterface {
 	@JooQuery(value = "select * from org.theta.joobase.josql.DataObject where pr1>:pr1", parameterPolicy = JooParameterPolicy.ByName)
 	public List<DataObject> selectTest(@JooParameter("pr1") int arg0);
 
-	@JooQuery(value = "select * from XXX", parameterPolicy = JooParameterPolicy.ByName)
+	@JooQuery(value = "select * from org.theta.joobase.josql.DataObject where pr5 = ?", parameterPolicy = JooParameterPolicy.ByOrder)
 	@JooShard("s2")
-	public List<DataObject> selectTest2(@JooParameter("para1") String para1);
+	public List<DataObject> selectTest2(String para1);
 
 }
