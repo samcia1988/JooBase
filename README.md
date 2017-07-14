@@ -17,7 +17,7 @@ Java Object Oriented dataBase.
 
 2. Create an interface like this.
 
-    '''java
+    ```java
     @JooShard("s1")
     public interface MyInterface {
     
@@ -37,11 +37,11 @@ Java Object Oriented dataBase.
     
     }
     
-    '''
+    ```
 
 3. Use JooDaoFactory to call them.
 
-    '''java
+    ```java
 		MyInterface ti = JooDaoFactory.getDao(MyInterface.class);
 
 		DataObject obj1 = new DataObject(1, 2, 3, 4, "5");
@@ -49,7 +49,7 @@ Java Object Oriented dataBase.
 		System.out.println(ti.insertDataObjectS2(obj1));
 		List<DataObject> result = ti.selectTest2("5");
 		System.out.println(result);
-     '''
+     ```
 
 # Documents
 
