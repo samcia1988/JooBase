@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.theta.joobase.annotations.JooInsert;
 import org.theta.joobase.annotations.JooParameter;
 import org.theta.joobase.annotations.JooParameterPolicy;
 import org.theta.joobase.annotations.JooQuery;
@@ -29,21 +30,24 @@ public abstract class JooAnnParser {
 
 		Method[] methods = clazz.getDeclaredMethods();
 		for (Method method : methods) {
-			JooMethodInfo methodInfo = new JooMethodInfo();
-			methodInfo.setMethod(method);
+			JooMethodInfo methodInfo = null;
 			JooShard jooShardAnnMethod = method.getDeclaredAnnotation(JooShard.class);
+			String shard = null;
 			if (jooShardAnnMethod != null)
-				methodInfo.setShard(jooShardAnnMethod.value());
+				shard = jooShardAnnMethod.value();
 			else
-				methodInfo.setShard(daoInfo.getShard());
+				shard = daoInfo.getShard();
 
 			JooQuery jooQueryAnn = method.getDeclaredAnnotation(JooQuery.class);
+			JooInsert jooInsertAnn = method.getDeclaredAnnotation(JooInsert.class);
 			if (jooQueryAnn != null) {
+				JooQueryMethodInfo queryMethodInfo = new JooQueryMethodInfo(method, shard, JooMethodType.Query,
+						method.getReturnType());
+
 				String sql = jooQueryAnn.value();
 				JooParameterPolicy policy = jooQueryAnn.parameterPolicy();
-				methodInfo.setSql(sql);
-				methodInfo.setPolicy(policy);
-				methodInfo.setReturnType(method.getReturnType());
+				queryMethodInfo.setSql(sql);
+				queryMethodInfo.setPolicy(policy);
 
 				String[] parameterNames = null;
 				switch (policy) {
@@ -59,13 +63,23 @@ public abstract class JooAnnParser {
 									clazz.getName(), method.getName(), method.getParameters()[i].getName()));
 						parameterNames[i] = jooParameter.value();
 					}
-					methodInfo.setParameterNames(parameterNames);
+					queryMethodInfo.setParameterNames(parameterNames);
 					break;
 				default:
 					throw new RuntimeException("Undefined parameter policy:" + policy);
 				}
 				logger.debug("Method {} has JooQuery annotation. JooInfo is {}", method.getName(),
-						methodInfo.toString());
+						queryMethodInfo.toString());
+
+				methodInfo = queryMethodInfo;
+			} else if (jooInsertAnn != null) {
+				JooInsertMethodInfo insertMethodInfo = new JooInsertMethodInfo(method, shard, JooMethodType.Insert,
+						method.getReturnType());
+
+				methodInfo = insertMethodInfo;
+			}
+
+			if (methodInfo != null) {
 				if (daoInfo.getMethodInfo() == null)
 					daoInfo.setMethodInfo(new HashMap<Method, JooMethodInfo>());
 				daoInfo.getMethodInfo().put(method, methodInfo);

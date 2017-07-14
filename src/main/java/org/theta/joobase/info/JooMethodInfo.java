@@ -1,9 +1,6 @@
 package org.theta.joobase.info;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
-
-import org.theta.joobase.annotations.JooParameterPolicy;
 
 /**
  * 
@@ -11,19 +8,26 @@ import org.theta.joobase.annotations.JooParameterPolicy;
  * @date Jul 13, 2017
  *
  */
-public class JooMethodInfo {
+public abstract class JooMethodInfo {
 
 	private Method method;
 
 	private String shard;
 
-	private String sql;
-
-	private JooParameterPolicy policy;
-
-	private String[] parameterNames;
+	private JooMethodType methodType;
 
 	private Class<?> returnType;
+
+	public JooMethodInfo() {
+
+	}
+
+	public JooMethodInfo(Method method, String shard, JooMethodType methodType, Class<?> returnType) {
+		this.method = method;
+		this.shard = shard;
+		this.methodType = methodType;
+		this.returnType = returnType;
+	}
 
 	public String getShard() {
 		return shard;
@@ -31,30 +35,6 @@ public class JooMethodInfo {
 
 	public void setShard(String shard) {
 		this.shard = shard;
-	}
-
-	public String getSql() {
-		return sql;
-	}
-
-	public void setSql(String sql) {
-		this.sql = sql;
-	}
-
-	public JooParameterPolicy getPolicy() {
-		return policy;
-	}
-
-	public void setPolicy(JooParameterPolicy policy) {
-		this.policy = policy;
-	}
-
-	public String[] getParameterNames() {
-		return parameterNames;
-	}
-
-	public void setParameterNames(String[] parameterNames) {
-		this.parameterNames = parameterNames;
 	}
 
 	public Method getMethod() {
@@ -65,10 +45,18 @@ public class JooMethodInfo {
 		this.method = method;
 	}
 
+	public JooMethodType getMethodType() {
+		return methodType;
+	}
+
+	public void setMethodType(JooMethodType methodType) {
+		this.methodType = methodType;
+	}
+
 	@Override
 	public String toString() {
-		return String.format("(Method:%s,Shard:%s,Sql:%s,Policy:%s,parameterNames:%s)", method.getName(), shard, sql,
-				policy.name(), Arrays.toString(parameterNames));
+		return String.format("Method:%s,Shard:%s,JooMethodType:%s,ReturnType:%s", getMethod().getName(), getShard(),
+				methodType, returnType);
 	}
 
 	public Class<?> getReturnType() {
