@@ -20,14 +20,6 @@ public interface JooShardManager {
 
 	/**
 	 * 
-	 * @param shardName
-	 * @param clazz
-	 * @return
-	 */
-	public List<Object> addShard(String shardName, Class<?> clazz);
-
-	/**
-	 * 
 	 * @param obj
 	 * @param shardName
 	 * @return

@@ -31,6 +31,12 @@
 			<version>3.2.5</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.39</version>
+		</dependency>
+
 		<!-- Log begin -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -38,6 +44,14 @@
 			<version>1.7.25</version>
 		</dependency>
 		<!-- Log end -->
+
+		<!-- Redis begin -->
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>2.9.0</version>
+		</dependency>
+		<!-- Redis end -->
 
 		<!-- Test begin -->
 		<dependency>

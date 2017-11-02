@@ -42,6 +42,9 @@ Java Object Oriented dataBase.
 3. Use JooDaoFactory to call them.
 
     ```java
+    	// Set JooShardManager.Default(Memory Type):
+    	JooDaoFactory.createMemoryJooShardManager();
+    	
 		MyInterface ti = JooDaoFactory.getDao(MyInterface.class);
 
 		DataObject obj1 = new DataObject(1, 2, 3, 4, "5");

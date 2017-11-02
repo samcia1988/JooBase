@@ -15,12 +15,19 @@ public class JooShardManagerMemory implements JooShardManager {
 
 	private Map<String, Map<Class<?>, List<Object>>> shards;
 
-	public JooShardManagerMemory() {
+	private static JooShardManagerMemory instance;
+
+	public synchronized static JooShardManagerMemory getInstance() {
+		if (instance == null)
+			instance = new JooShardManagerMemory();
+		return instance;
+	}
+
+	private JooShardManagerMemory() {
 		shards = new HashMap<>();
 	}
 
-	@Override
-	public List<Object> addShard(String shardName, Class<?> clazz) {
+	private List<Object> addShard(String shardName, Class<?> clazz) {
 		if (!shards.containsKey(shardName))
 			shards.put(shardName, new HashMap<Class<?>, List<Object>>());
 		Map<Class<?>, List<Object>> shardMap = shards.get(shardName);

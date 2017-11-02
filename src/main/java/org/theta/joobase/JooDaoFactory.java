@@ -6,6 +6,8 @@ import org.theta.joobase.info.JooAnnParser;
 import org.theta.joobase.info.JooDaoInfo;
 import org.theta.joobase.proxy.JooDaoProxyCglib;
 import org.theta.joobase.shard.JooShardManager;
+import org.theta.joobase.shard.JooShardManagerMemory;
+import org.theta.joobase.shard.JooShardManagerRedis;
 
 import net.sf.cglib.proxy.Enhancer;
 
@@ -50,6 +52,15 @@ public abstract class JooDaoFactory {
 
 	public static void setJooShardManager(JooShardManager jooShardManager) {
 		JooDaoFactory.jooShardManager = jooShardManager;
+	}
+
+	public static void createMemoryJooShardManager() {
+		setJooShardManager(JooShardManagerMemory.getInstance());
+	}
+
+	public static void createRedisJooShardManager(String host, int port, int dbIndex, String password) {
+		JooShardManagerRedis.init(host, port, dbIndex, password);
+		setJooShardManager(JooShardManagerRedis.getInstance());
 	}
 
 }
