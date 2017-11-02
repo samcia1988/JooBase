@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.theta.joobase.info.JooAnnParser;
 import org.theta.joobase.info.JooDaoInfo;
 import org.theta.joobase.proxy.JooDaoProxyCglib;
+import org.theta.joobase.shard.JooShardManager;
 
 import net.sf.cglib.proxy.Enhancer;
 
@@ -18,9 +19,13 @@ public abstract class JooDaoFactory {
 
 	private static Logger logger = LoggerFactory.getLogger(JooDaoFactory.class);
 
+	private static JooShardManager jooShardManager;
+
 	@SuppressWarnings("unchecked")
 	public static <T> T getDao(Class<?> clazz) {
 		try {
+			if (jooShardManager == null)
+				throw new RuntimeException("JooDaoFactory's JooShardManager must be set.");
 			if (clazz == null)
 				throw new RuntimeException(
 						"JooDaoFactory's getDao() method must be given a not null parameter of the dao interface's class.");
@@ -32,7 +37,7 @@ public abstract class JooDaoFactory {
 
 			JooDaoInfo daoInfo = JooAnnParser.parse(clazz);
 
-			JooDaoProxyCglib proxy = JooDaoProxyCglib.getInstance(daoInfo);
+			JooDaoProxyCglib proxy = JooDaoProxyCglib.getInstance(daoInfo, jooShardManager);
 
 			Enhancer enhancer = new Enhancer();
 			enhancer.setSuperclass(clazz);
@@ -41,6 +46,10 @@ public abstract class JooDaoFactory {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public static void setJooShardManager(JooShardManager jooShardManager) {
+		JooDaoFactory.jooShardManager = jooShardManager;
 	}
 
 }

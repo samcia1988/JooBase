@@ -11,15 +11,16 @@ import java.util.Map;
  * @date Jul 13, 2017
  *
  */
-public class JooShardManager {
+public class JooShardManagerMemory implements JooShardManager {
 
-	private static Map<String, Map<Class<?>, List<Object>>> shards;
+	private Map<String, Map<Class<?>, List<Object>>> shards;
 
-	static {
+	public JooShardManagerMemory() {
 		shards = new HashMap<>();
 	}
 
-	public static List<Object> addShard(String shardName, Class<?> clazz) {
+	@Override
+	public List<Object> addShard(String shardName, Class<?> clazz) {
 		if (!shards.containsKey(shardName))
 			shards.put(shardName, new HashMap<Class<?>, List<Object>>());
 		Map<Class<?>, List<Object>> shardMap = shards.get(shardName);
@@ -31,17 +32,19 @@ public class JooShardManager {
 		return shard;
 	}
 
-	public static List<Object> getShard(String shardName, Class<?> clazz) {
+	@Override
+	public List<Object> getShard(String shardName, Class<?> clazz) {
 		if (shards.get(shardName) == null)
 			return null;
 		return shards.get(shardName).get(clazz);
 	}
 
-	public static long addOne(Object obj, String shardName) {
+	@Override
+	public long addOne(Object obj, String shardName) {
 		try {
-			List<Object> shard = JooShardManager.getShard(shardName, obj.getClass());
+			List<Object> shard = this.getShard(shardName, obj.getClass());
 			if (shard == null)
-				shard = JooShardManager.addShard(shardName, obj.getClass());
+				shard = this.addShard(shardName, obj.getClass());
 			shard.add(obj);
 			return 1;
 		} catch (Exception ex) {
@@ -50,14 +53,16 @@ public class JooShardManager {
 		}
 	}
 
-	public static long addBatch(Object[] objs, String shardName) {
+	@Override
+	public long addBatch(Object[] objs, String shardName) {
 		long count = 0;
 		for (Object obj : objs)
 			count += addOne(obj, shardName);
 		return count;
 	}
 
-	public static long addBatch(List<?> objs, String shardName) {
+	@Override
+	public long addBatch(List<?> objs, String shardName) {
 		long count = 0;
 		for (Object obj : objs)
 			count += addOne(obj, shardName);

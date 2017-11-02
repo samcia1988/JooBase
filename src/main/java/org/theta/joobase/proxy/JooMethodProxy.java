@@ -23,12 +23,15 @@ public class JooMethodProxy {
 
 	private JooMethodInfo jooMethodInfo;
 
-	private JooMethodProxy(JooMethodInfo jooMethodInfo) {
+	private JooShardManager jooShardManager;
+
+	private JooMethodProxy(JooMethodInfo jooMethodInfo, JooShardManager jooShardManager) {
 		this.jooMethodInfo = jooMethodInfo;
+		this.jooShardManager = jooShardManager;
 	}
 
-	public static JooMethodProxy getInstance(JooMethodInfo jooMethodInfo) {
-		return new JooMethodProxy(jooMethodInfo);
+	public static JooMethodProxy getInstance(JooMethodInfo jooMethodInfo, JooShardManager jooShardManager) {
+		return new JooMethodProxy(jooMethodInfo, jooShardManager);
 	}
 
 	public Object invoke(Object[] args) {
@@ -75,7 +78,7 @@ public class JooMethodProxy {
 					.getActualTypeArguments()[0];
 			returnType = Class.forName(actualType.getTypeName());
 		}
-		QueryResults results = query.execute(JooShardManager.getShard(queryMethodInfo.getShard(), returnType));
+		QueryResults results = query.execute(jooShardManager.getShard(queryMethodInfo.getShard(), returnType));
 		return results.getResults();
 	}
 
@@ -87,12 +90,12 @@ public class JooMethodProxy {
 				if (arg != null) {
 					if (arg.getClass().isArray()) {
 						Object[] argArr = (Object[]) arg;
-						count += JooShardManager.addBatch(argArr, shardName);
+						count += jooShardManager.addBatch(argArr, shardName);
 					} else if (arg instanceof List) {
 						List<?> argList = (List<?>) arg;
-						count += JooShardManager.addBatch(argList, shardName);
+						count += jooShardManager.addBatch(argList, shardName);
 					} else {
-						count += JooShardManager.addOne(arg, shardName);
+						count += jooShardManager.addOne(arg, shardName);
 					}
 				}
 		Class<?> returnType = insertMethodInfo.getReturnType();

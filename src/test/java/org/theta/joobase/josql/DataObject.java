@@ -1,5 +1,7 @@
 package org.theta.joobase.josql;
 
+import java.util.Arrays;
+
 /**
  * 
  * @author ranger
@@ -40,6 +42,12 @@ public class DataObject {
 
 	public String flag() {
 		return "flag";
+	}
+
+	@Override
+	public String toString() {
+		Object[] obj = new Object[] { pr1, pr2, pr3, pr4, pr5 };
+		return Arrays.toString(obj);
 	}
 
 }
