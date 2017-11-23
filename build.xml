@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="kx-bigwhale-argus-common" default="compiler">
+
+    <property name="winOS" value="Windows"/>
+    <property name="unixOS" value="Unix"/>
+
+    <target name="init">
+        <condition property="isWindows">
+            <os family="windows"/>
+        </condition>
+        <condition property="isUnix">
+            <os family="unix"/>
+        </condition>
+    </target>
+
+    <target name="compilerWindows" if="isWindows" depends="init">
+        <property name="dir.compiler.home" location="."/>
+        <echo message="Current operation system family is Windows."/>
+        <exec executable="cmd" failonerror="true" dir="${dir.compiler.home}">
+            <arg line="/c  mvn clean source:jar install -N -Dmaven.test.skip=true"/>
+        </exec>
+    	<exec executable="cmd" failonerror="true" dir="${dir.compiler.home}">
+    	     <arg line="/c  mvn clean install -Dmaven.test.skip=true"/>
+    	</exec>
+    </target>
+
+    <target name="compilerUnix" if="isUnix" depends="init">
+        <property name="dir.compiler.home" location="."/>
+        <echo message="Current operation system family is Unix."/>
+        <exec executable="mvn" failonerror="true" dir="${dir.compiler.home}">
+            <arg line=" clean install -Dmaven.test.skip=true"/>
+        </exec>
+    </target>
+
+    <target name="compiler" depends="compilerWindows,compilerUnix">
+        <echo message="Main compiling is finished,this target is just for sink and show."/>
+    </target>
+
+</project>
