@@ -6,17 +6,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * 
- * @author ranger
- * @date Jul 13, 2017
- *
- */
-@Target({ ElementType.METHOD, ElementType.TYPE })
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface JooShard {
+public @interface JooCell {
 
-	String value() default "";
+    String name() default "";
 
 }
